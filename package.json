@@ -1,0 +1,20 @@
+{
+  "name": "attendance-manager",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/google-apps-script": "^1.0.78",
+    "typescript": "^5.3.3"
+  },
+  "devDependencies": {
+    "@google/clasp": "^2.4.2",
+    "tslint": "^6.1.3"
+  }
+}

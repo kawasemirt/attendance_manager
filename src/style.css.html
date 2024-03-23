@@ -1,0 +1,226 @@
+.fixed-header-top,
+.fixed-header-row {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+.fixed-header-top,
+.fixed-header-column {
+    position: sticky;
+    left: 0;
+    white-space: nowrap;
+    z-index: 1;
+    background: #fff;
+    color: #2589d0;
+    font-weight: bold;
+}
+
+.fixed-header-top {
+    z-index: 2;
+}
+
+#tabcontrol {
+}
+#tabcontrol label {
+    display: inline-block;
+    text-align: center;
+    border-radius: 3px;
+    border: 3px solid #ccc;
+    border-bottom: none;
+    padding: 1rem 2rem;
+    background-color: #fff;
+    cursor: pointer;
+}
+#tabcontrol label:hover {
+    background-color: #ddd;
+}
+#tabcontrol label.tabSelected {
+    background-color: #2589d0;
+    color: #fff;
+    border-radius: 3px;
+    border: 3px solid #2589d0;
+    border-bottom: none;
+}
+
+#tabcontrol label.tabSelected:hover {
+    background-color: #fff;
+}
+#tabcontrol label a {
+    font-size: 3.5vw;
+    font-family: '游ゴシック', Arial, sans-serif;
+    color: #444;
+}
+#tabcontrol label.tabSelected a {
+    color: #fff;
+}
+
+body {
+    font-family: '游ゴシック', Arial, sans-serif;
+    font-size: 3.5vw;
+    margin: 0;
+    padding: 0;
+    color: #444;
+    /* display: flex; */
+    /* align-items: center; */
+    /* justify-content: center; */
+    /* height: 100vh; */
+    /* overflow: hidden; */
+}
+
+h3 {
+    padding: 1rem;
+}
+h3:before {
+    margin-right: 0.5rem;
+    border-left: 10px solid;
+    content: '';
+}
+
+#attendance__table {
+    width: 100vw;
+    border: none;
+    border-collapse: collapse;
+}
+
+#attendance__table thead th {
+    background: #999;
+    color: #fff;
+    padding: 1rem 2rem;
+    border: 3px solid #fff;
+    border-top: hidden;
+    border-bottom: hidden;
+}
+
+#attendance__table tbody td {
+    padding: 1rem 2rem;
+    white-space: nowrap;
+    border: 3px solid #999;
+    border-collapse: collapse;
+}
+
+
+.selectbox-container {
+    position: relative;
+    margin-bottom: 2rem;
+}
+
+.selectbox-container::before,
+.selectbox-container::after {
+    position: absolute;
+    content: '';
+    pointer-events: none;
+}
+
+.selectbox-container::before {
+    right: 0;
+    display: inline-block;
+    width: 2.8em;
+    height: 2.8em;
+    border-radius: 0 3px 3px 0;
+    background-color: #2589d0;
+    content: '';
+}
+
+.selectbox-container::after {
+    position: absolute;
+    top: 50%;
+    right: 1.4em;
+    transform: translate(50%, -50%) rotate(45deg);
+    width: 6px;
+    height: 6px;
+    border-bottom: 3px solid #fff;
+    border-right: 3px solid #fff;
+    content: '';
+}
+
+.selectbox-container select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    min-width: 230px;
+    height: 2.8em;
+    padding: .4em 3.6em .4em .8em;
+    border: 2px solid #2589d0;
+    border-radius: 3px;
+    font-size: 1em;
+    color: #444;
+    cursor: pointer;
+    margin-left: 2rem;
+}
+
+.selectbox-container select:focus {
+    outline: 1px solid #2589d0;
+}
+
+input[type=radio] {
+    display: none;
+}
+
+.radio-inline__input {
+    clip: rect(1px, 1px, 1px, 1px);
+    position: absolute !important;
+}
+
+.radio-inline__label {
+    display: inline-block;
+    background: #eee;
+    padding: 1rem 2rem;
+    margin-right: 8px;
+    border-radius: 3px;
+    transition: all .2s;
+    cursor: pointer;
+}
+
+.radio-inline__input:checked + .radio-inline__label {
+    background: #2589d0;
+    color: #fff;
+    text-shadow: 0 0 1px rgba(0,0,0,.7);
+}
+
+.radio-container__table {
+    text-align: center;
+}
+
+.radio-question__label {
+    text-align: left;
+    padding: 1rem 2rem;
+    white-space: nowrap;
+    background: #fff;
+}
+
+.comment__input {
+    width: 80%;
+    height: 10vh;
+    margin-left: 2rem;
+    margin-bottom: 2rem;
+    resize: vertical;
+    box-sizing: border-box;
+    border: 2px solid #2589d0;
+    border-radius: 3px;
+    color: #444;
+    font-size: 3.5vw;
+    font-family: '游ゴシック', Arial, sans-serif;
+}
+
+
+.confirm__button {
+    background: #2589d0;
+    color: #fff;
+    font-size: 3.5vw;
+    font-family: '游ゴシック', Arial, sans-serif;
+    padding: 1rem 2rem;
+    border-radius: 3px;
+    transition: all .2s;
+    cursor: pointer;
+    border: none;
+    outline: none;
+}
+
+.form-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    margin-bottom: 2rem;
+}

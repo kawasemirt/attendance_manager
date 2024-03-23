@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, user-scalable=yes">
+        <base target="_top">
+        <style>
+            <?!= include('style.css'); ?>
+        </style>
+    </head>
+    <body>
+        <h2>創玄会 出欠管理</h2>
+        <h3>出欠一覧</h3>
+            <div id="tabcontrol">
+                <? for(let j = 0; j < sheetNames.length; j++){ ?>
+                    <label class="<?= sheetNames[j]===sheetName ? "tabSelected" : "" ?>">
+                        <a href="https://script.google.com/macros/s/<?= deployId ?>/exec?sheetName=<?= sheetNames[j] ?>"><?= sheetNames[j] ?></a>
+                    </label>
+                <? } ?>
+            </div>
+            <table id="attendance__table">
+                <thead>
+                    <!-- 2列目まではヘッダー -->
+                    <tr>
+                        <? let header = links[0] ?>
+                            <th class="fixed-header-top"><?= header[0] ?><br/> <?= links[1][0] ?></th>
+                        <? for(let i = 2; i < header.length; i++){ ?>
+                            <th class="fixed-header-row"><?= header[i] ?><br/> <?= links[1][i] ?></th>
+                        <? } ?>
+                            <!-- コメント列は末尾に載せておく -->
+                            <th class="fixed-header-row"><?= header[1] ?><br/> <?= links[1][1] ?></th>
+                    </tr>
+                </thead>
+                <tbody>
+                <!-- 4行目まではヘッダー -->
+                <? for(let i = 4; i < links.length; i++){ ?>
+                    <? let link = links[i] ?>
+                    <tr>
+                        <td class="fixed-header-column" onclick="handleNameClick(this)" data="<?= i ?>"><?= link[0] ?></td>
+                        <? for(let j = 2; j < link.length; j++){ ?>
+                            <td class="data-row-<?= i ?>"><?= link[j] ?></td>
+                        <? } ?>
+                            <td class="data-row-<?= i ?>-comment"><?= link[1] ?></td>
+                    </tr>
+                <? } ?>
+                </tbody>
+            </table>
+
+        <hr/>
+        <h3 id="attendance-form">出欠の更新</h3>
+            <label class="selectbox-container">
+            <select id="name">
+                    <option value="">名前を選択してください</option>
+                <? for(let i = 4; i < links.length; i++){ ?>
+                    <option value="<?= links[i][0] ?>"><?= links[i][0] ?></option>
+                <? } ?>
+            </select>
+            </label>
+            <br/>
+            <table class="radio-container__table">
+                <? for(let i = 2; i < header.length; i++){ ?>
+                    <tr>
+                    <td class="radio-question__label"><?= header[i] ?> <?= links[2][i] ?><br/><?= links[1][i] ?><br/><?= links[3][i] ?></td>
+                    <td><input type="radio" class="radio-inline__input" name="question<?= i - 1 ?>" id="q<?= i - 1 ?>-1" value="出"><label class="radio-inline__label" for="q<?= i - 1 ?>-1">出</label></td>
+                    <td><input type="radio" class="radio-inline__input" name="question<?= i - 1 ?>" id="q<?= i - 1 ?>-2" value="欠"><label class="radio-inline__label" for="q<?= i - 1 ?>-2">欠</label></td>
+                    <td><input type="radio" class="radio-inline__input" name="question<?= i - 1 ?>" id="q<?= i - 1 ?>-3" value="遅"><label class="radio-inline__label" for="q<?= i - 1 ?>-3">遅</label></td>
+                    <td><input type="radio" class="radio-inline__input" name="question<?= i - 1 ?>" id="q<?= i - 1 ?>-4" value="早"><label class="radio-inline__label" for="q<?= i - 1 ?>-4">早</label></td>
+                    <td><input type="radio" class="radio-inline__input" name="question<?= i - 1 ?>" id="q<?= i - 1 ?>-5" value="鍵"><label class="radio-inline__label" for="q<?= i - 1 ?>-5">鍵</label></td>
+                    <!-- <td><input type="radio" class="radio-inline__input" name="question<?= i - 1 ?>" id="q<?= i - 1 ?>-6" value="M"><label class="radio-inline__label" for="q<?= i - 1 ?>-6">M</label></td> -->
+                    <!-- <td><input type="radio" class="radio-inline__input" name="question<?= i - 1 ?>" id="q<?= i - 1 ?>-7" value="S"><label class="radio-inline__label" for="q<?= i - 1 ?>-7">S</label></td> -->
+                    </tr>
+                <? } ?>
+            </table>
+                <!-- <label class="form__label">コメント</label> -->
+                <textarea class="comment__input" id="comment" name="comment" placeholder="コメント"></textarea>
+            <div class="form-container">
+                <button class="confirm__button" onclick="updateAttendance()">更新</button>
+            </div>
+            <br/>
+            <div><a href="https://forms.gle/rLEkfHcGsWKkBe5D9" target="_blank">リストに名前を追加したい場合（暫定）</a></div>
+
+        <hr/>
+        <h3>担当者用リンク</h3>
+            <ul>
+                <li><a href="https://script.google.com/macros/s/<?= deployId ?>/exec?action=register" target="_blank">稽古日程反映（外務用）</a></li>
+                <li>備品担当登録（TODO）</li>
+            </ul>
+    </body>
+    <script>
+        function handleNameClick(clickedElement) {
+            const valueToSet = clickedElement.innerText;
+            document.getElementById('name').value = valueToSet;
+            const rowIndex = Number(clickedElement.getAttribute("data"));
+            // 選択状態を復元する
+            const rowData = document.getElementsByClassName(`data-row-${rowIndex}`);
+            Array.from(rowData).forEach((e, index) => {
+                const question = document.getElementsByName(`question${index + 1}`);
+                const answerNum = Array.from(question).findIndex(a => a.value === e.innerText);
+                if (answerNum < 0){
+                    return;
+                }
+                question[answerNum].checked = true;
+            });
+            // コメントを復元する
+            const comment = document.getElementsByClassName(`data-row-${rowIndex}-comment`)[0].innerText;
+            document.getElementById("comment").value = comment;
+            // attendance-formというidを持つ要素の位置までスクロール
+            document.getElementById("attendance-form").scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function updateAttendance() {
+            const selectedValues = [];
+            if (document.getElementById("name").value === "") {
+                alert("名前を選択してください");
+                return;
+            }
+        
+            // フォーム内のラジオボタンを取得
+            const radioButtons = document.querySelectorAll('input[type="radio"]:checked');
+        
+            for(let i = 1; i < <?= header.length ?>; i++){
+                let answer = "";
+                radioButtons.forEach(radioButton => {
+                    if(radioButton.name === `question${i}`){
+                        answer = radioButton?.value || "";
+                    }
+                });
+                selectedValues.push(answer);
+            }
+            const comment = document.getElementById("comment").value || "";
+
+            google.script.run.withSuccessHandler(success).updateIndivisualRow("<?= sheetName ?>", document.getElementById("name").value, [comment, ...selectedValues]);
+        }
+
+        function success(n){
+            console.log("updated");
+            alert("送信しました。最新の出欠表を確認するには、ページを更新してください。");
+            // ページ更新させたいが、単純なlocation.reloadではGASに再照会されないよう
+            // window.location.href = 'https://script.google.com/macros/s/<?= deployId ?>/exec';
+        }
+    </script>
+</html>

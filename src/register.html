@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+    
+  <head>
+    <style>
+    <?!= include('style.css'); ?>
+    </style>
+    <base target="_top">
+  </head>
+    <body>
+        
+        <h3>Googleカレンダーの予定を出欠表に反映</h3>
+        <label class="selectbox-container">
+        <select id="years">
+            <option value="2024">2024年</option>
+            <option value="2025">2025年</option>
+            <option value="2026">2026年</option>
+            <option value="2027">2027年</option>
+            <option value="2028">2028年</option>
+            <option value="2029">2029年</option>
+        </select>
+        </label>
+        
+        <label class="selectbox-container">
+        <select id="month">
+            <? for(let i = 1; i < 13; i++){ ?>
+                <? let nextMonth = new Date().getMonth() + 2; ?>
+                <option value="<?= i ?>" <?= i===nextMonth ? "selected" : "" ?>><?= i ?>月</option>
+            <? } ?>
+        </select>
+        </label>
+        <br/><br/>
+        
+        <div class="form-container">
+            <button class="confirm__button" onclick="confirmUpdateModal()">更新</button>
+        </div>
+
+        <div id="status"></div>
+        <div id="events"></div>
+        <hr/>
+        <h3>稽古日程の告知</h3>
+            <div id="mail-status">稽古日程をメーリスに自動送信します</div>
+            <textarea class="comment__input" id="comment" name="comment" placeholder="メール本文に追加するコメント"></textarea>
+            <div class="form-container">
+                <button class="confirm__button" onclick="confirmEmailModal()">送信</button>
+            </div>
+    </body>
+    <script>
+        // 確認モーダルを表示する関数
+        function confirmUpdateModal(){
+            if (confirm("本当に更新しますか？")) {
+                update();
+            } else {
+                console.log('canceled');
+            }
+        }
+
+        function update(){
+            let years = document.getElementById("years").value;
+            let month = document.getElementById("month").value;
+            google.script.run.withSuccessHandler(success).updateSheetByCalendar(years, month);
+        }
+
+        function success(n){
+            document.getElementById("status").innerHTML = "更新完了　以下の予定が反映されました";
+            document.getElementById("events").innerHTML = n;
+        }
+
+        function confirmEmailModal(){
+            if (confirm("本当に送信しますか？")) {
+                sendEmail();
+            } else {
+                console.log('canceled');
+            }
+        }
+
+        function sendEmail() {
+            const eventText = document.getElementById("events").innerHTML;
+            const commentText = document.getElementById("comment").value;
+            const month = document.getElementById("month").value;
+            if (eventText === "") {
+                alert("稽古日程が更新されていません");
+                return;
+            }
+            document.getElementById("mail-status").innerHTML = "送信中...";
+            google.script.run.withSuccessHandler(successEmailHandler).sendAnnouncementEmail(month, eventText, commentText);
+        }
+
+        function successEmailHandler(n) {
+            document.getElementById("mail-status").innerHTML = "送信完了";
+        }
+    </script>
+</html>
